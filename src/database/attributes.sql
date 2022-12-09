@@ -25,5 +25,5 @@ INSERT INTO `attributes` (`_id`, `name`) VALUES
 (5, 'speed'),
 (6, 'clarity'),
 (7, 'accuracy'),
-(8, 'pets'):
+(8, 'pets');
 

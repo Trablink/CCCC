@@ -18,5 +18,5 @@ CREATE TABLE IF NOT EXISTS `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`_id`, `name`) VALUES
+INSERT INTO `users` (`_id`, `name`, `password`) VALUES
 ();

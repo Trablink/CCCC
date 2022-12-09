@@ -2,14 +2,13 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  mode: 'development',
-  entry: {
-    bundle: path.resolve(__dirname, 'src/server/index.js'),
-  },
+  mode: process.env.NODE_ENV,
+  entry: './src/client/index.js',
+
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: '[name][contenthash].js',
     clean: true,
+    publicPath: '/',
     assetModuleFilename: '[name][ext]',
     filename: 'bundle.js',
   },
@@ -19,7 +18,13 @@ module.exports = {
       directory: path.resolve(__dirname, 'dist'),
       publicPath: '/',
     },
-    port: 3000,
+    port: 8080,
+    proxy: {
+      '/api/**': {
+        target: 'http://localhost:3000',
+        secure: false,
+      },
+    },
     host: 'localhost',
     open: true,
     hot: true,

@@ -1,4 +1,4 @@
-const User = require('../db/users.sql');
+const db = require('../server/CCCCmodel');
 
 const userController = {};
 

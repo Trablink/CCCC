@@ -1,28 +1,29 @@
 const { url } = require('inspector');
-const Attributes = require('../db/attributes.sql');
-const Partners = require('../db/partners.sql');
-const Ratings = require('../db/ratings_scale.sql');
-const User = require('../db/users.sql');
 
-const db = url('./localhost/database/'); // HOW THE HELL DO I DO THIS?????????????
+const db = require('../server/CCCCmodel');
 
 const partnerController = {};
 
 partnerController.getPartners = (req, res, next) => {
   console.log('PartnerController.getPartners ENTERED');
   const getPartnersQuery =
-    'SELECT u._id, u.name, p.name AS partnerName, a.* AS attributes, r.scale AS ratings FROM users u LEFT OUTER JOIN partners p ON p._id = u._id LEFT OUTER JOIN attributes a ON a._id = p._id LEFT JOIN ratings_scale rs ON rs._id = a.* ORDER BY p._id;';
+    'SELECT u.name AS user, pd.name AS partner, a.attribute AS attribute, rs.number AS rating FROM attribute_assignment aa LEFT OUTER JOIN users u ON aa.user_id = u._id LEFT OUTER JOIN partner_details pd ON aa.partner_id = pd._id LEFT OUTER JOIN attributes a ON aa.attributes_id = a._id LEFT OUTER JOIN ratings_scale rs ON aa.ratings_id = rs._id WHERE aa.user_id = 1 ORDER BY pd.name;';
+
   db.query(getPartnersQuery)
     .then((data) => {
       const arr = data.rows;
+      arr.forEach((e) => {
+        if (typeof e['rating'] !== Number) {
+          e['rating'] = 1;
+        }
+      });
       res.locals.partners = arr;
+      next();
     })
+
     .catch((err) => {
       console.log('ERR: error in partnerController.getPartners');
       next({ log: err, message: 'error in partnerController.getPartners' });
-    })
-    .then(() => {
-      next();
     });
 };
 
